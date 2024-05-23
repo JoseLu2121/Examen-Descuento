@@ -74,6 +74,7 @@ const update = async function (req, res) {
   try {
     await Restaurant.update(req.body, { where: { id: req.params.restaurantId } })
     const updatedRestaurant = await Restaurant.findByPk(req.params.restaurantId)
+
     res.json(updatedRestaurant)
   } catch (err) {
     res.status(500).send(err)

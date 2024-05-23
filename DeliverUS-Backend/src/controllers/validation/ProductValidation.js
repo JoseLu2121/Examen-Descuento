@@ -1,5 +1,5 @@
 import { check } from 'express-validator'
-import { Restaurant } from '../../models/models.js'
+import { Product, Restaurant } from '../../models/models.js'
 import { checkFileIsImage, checkFileMaxSize } from './FileValidationHelper.js'
 
 const maxFileSize = 2000000 // around 2Mb
@@ -9,6 +9,17 @@ const checkRestaurantExists = async (value, { req }) => {
     const restaurant = await Restaurant.findByPk(req.body.restaurantId)
     if (restaurant === null) {
       return Promise.reject(new Error('The restaurantId does not exist.'))
+    } else { return Promise.resolve() }
+  } catch (err) {
+    return Promise.reject(new Error(err))
+  }
+}
+const checkRestaurantHasDiscount = async (value, { req }) => {
+  try {
+    const updatedRestaurant = await Product.findByPk(req.params.productId)
+    const restaurant = await Restaurant.findByPk(req.body.id)
+    if (restaurant.discount === 0) {
+      return Promise.reject(new Error('The restaurant doesnt have discount.'))
     } else { return Promise.resolve() }
   } catch (err) {
     return Promise.reject(new Error(err))
@@ -48,4 +59,4 @@ const update = [
   check('restaurantId').not().exists()
 ]
 
-export { create, update }
+export { create, update, checkRestaurantHasDiscount }

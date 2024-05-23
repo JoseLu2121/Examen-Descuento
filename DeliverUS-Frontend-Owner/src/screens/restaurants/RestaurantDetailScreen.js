@@ -4,13 +4,14 @@ import { StyleSheet, View, FlatList, ImageBackground, Image, Pressable } from 'r
 import { showMessage } from 'react-native-flash-message'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { getDetail } from '../../api/RestaurantEndpoints'
-import { remove } from '../../api/ProductEndpoints'
+import { remove, promote } from '../../api/ProductEndpoints'
 import ImageCard from '../../components/ImageCard'
 import TextRegular from '../../components/TextRegular'
 import TextSemiBold from '../../components/TextSemibold'
 import * as GlobalStyles from '../../styles/GlobalStyles'
 import DeleteModal from '../../components/DeleteModal'
 import defaultProductImage from '../../../assets/product.jpeg'
+import TextError from '../../components/TextError'
 
 export default function RestaurantDetailScreen ({ navigation, route }) {
   const [restaurant, setRestaurant] = useState({})
@@ -61,10 +62,14 @@ export default function RestaurantDetailScreen ({ navigation, route }) {
         title={item.name}
       >
         <TextRegular numberOfLines={2}>{item.description}</TextRegular>
-        <TextSemiBold textStyle={styles.price}>{item.price.toFixed(2)}€</TextSemiBold>
+        {item.promote &&
+        <TextSemiBold textStyle={styles.price}>{item.price.toFixed(2)}€  <TextSemiBold textStyle={{ color: GlobalStyles.brandPrimary }}> Price promoted is:  {(item.price.toFixed(2) - (item.price * (restaurant.discount / 100))).toFixed(2)}€  </TextSemiBold></TextSemiBold>}
+        {
+        <TextSemiBold textStyle={styles.price}>{item.price.toFixed(2)}€ </TextSemiBold>}
         {!item.availability &&
           <TextRegular textStyle={styles.availability }>Not available</TextRegular>
         }
+
          <View style={styles.actionButtonsContainer}>
           <Pressable
             onPress={() => navigation.navigate('EditProductScreen', { id: item.id })
@@ -102,11 +107,40 @@ export default function RestaurantDetailScreen ({ navigation, route }) {
             </TextRegular>
           </View>
         </Pressable>
+        <Pressable
+            onPress={() => { promoteSwitch(item.id) }}
+            style={({ pressed }) => [
+              {
+                backgroundColor: pressed
+                  ? GlobalStyles.brandSuccess
+                  : GlobalStyles.brandSuccessTap
+              },
+              styles.actionButton
+            ]}>
+          <View style={[{ flex: 1, flexDirection: 'row', justifyContent: 'center' }]}>
+            <MaterialCommunityIcons name='star-circle' color={'white'} size={20}/>
+            <TextRegular textStyle={styles.text}>
+              {item.promote &&
+                          <TextRegular textStyle={styles.text}>
+                          Demote
+                        </TextRegular> }
+              {!item.promote &&
+                <TextRegular textStyle={styles.text}>
+                Promote
+              </TextRegular> }
+
+            </TextRegular>
+          </View>
+        </Pressable>
         </View>
       </ImageCard>
     )
   }
 
+  const promoteSwitch = async (value) => {
+    await promote(value)
+    fetchRestaurantDetail()
+  }
   const renderEmptyProductsList = () => {
     return (
       <TextRegular textStyle={styles.emptyList}>
@@ -243,6 +277,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     bottom: 5,
     position: 'absolute',
-    width: '90%'
+    width: '60%'
   }
 })
