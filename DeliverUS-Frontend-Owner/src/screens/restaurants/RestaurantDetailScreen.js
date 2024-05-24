@@ -107,6 +107,7 @@ export default function RestaurantDetailScreen ({ navigation, route }) {
             </TextRegular>
           </View>
         </Pressable>
+        {restaurant.discount > 0 &&
         <Pressable
             onPress={() => { promoteSwitch(item.id) }}
             style={({ pressed }) => [
@@ -129,9 +130,10 @@ export default function RestaurantDetailScreen ({ navigation, route }) {
                 Promote
               </TextRegular> }
 
-            </TextRegular>
+            </TextRegular >
           </View>
         </Pressable>
+  }
         </View>
       </ImageCard>
     )
@@ -271,12 +273,14 @@ const styles = StyleSheet.create({
     padding: 10,
     alignSelf: 'center',
     flexDirection: 'column',
-    width: '50%'
+    width: '30%'
   },
+
   actionButtonsContainer: {
     flexDirection: 'row',
     bottom: 5,
     position: 'absolute',
-    width: '60%'
+    width: '90%'
   }
+
 })
