@@ -64,7 +64,7 @@ export default function RestaurantDetailScreen ({ navigation, route }) {
         <TextRegular numberOfLines={2}>{item.description}</TextRegular>
         {item.promote &&
         <TextSemiBold textStyle={styles.price}>{item.price.toFixed(2)}€  <TextSemiBold textStyle={{ color: GlobalStyles.brandPrimary }}> Price promoted is:  {(item.price.toFixed(2) - (item.price * (restaurant.discount / 100))).toFixed(2)}€  </TextSemiBold></TextSemiBold>}
-        {
+        {!item.promote &&
         <TextSemiBold textStyle={styles.price}>{item.price.toFixed(2)}€ </TextSemiBold>}
         {!item.availability &&
           <TextRegular textStyle={styles.availability }>Not available</TextRegular>
@@ -118,7 +118,7 @@ export default function RestaurantDetailScreen ({ navigation, route }) {
               styles.actionButton
             ]}>
           <View style={[{ flex: 1, flexDirection: 'row', justifyContent: 'center' }]}>
-            <MaterialCommunityIcons name='star-circle' color={'white'} size={20}/>
+            <MaterialCommunityIcons name= {item.promote ? 'star-circe' : 'abacus'} color={'white'} size={20}/>
             <TextRegular textStyle={styles.text}>
               {item.promote &&
                           <TextRegular textStyle={styles.text}>

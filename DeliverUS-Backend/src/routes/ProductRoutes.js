@@ -48,8 +48,6 @@ const loadFileRoutes = (app) => {
     isLoggedIn,
     hasRole('owner'),
     checkEntityExists(Product, 'productId'),
-    ProductValidation.checkRestaurantHasDiscount,
-    handleValidation,
     ProductController.changePromote
   )
 }

@@ -14,17 +14,7 @@ const checkRestaurantExists = async (value, { req }) => {
     return Promise.reject(new Error(err))
   }
 }
-const checkRestaurantHasDiscount = async (value, { req }) => {
-  try {
-    const updatedRestaurant = await Product.findByPk(req.params.productId)
-    const restaurant = await Restaurant.findByPk(req.body.id)
-    if (restaurant.discount === 0) {
-      return Promise.reject(new Error('The restaurant doesnt have discount.'))
-    } else { return Promise.resolve() }
-  } catch (err) {
-    return Promise.reject(new Error(err))
-  }
-}
+
 const create = [
   check('name').exists().isString().isLength({ min: 1, max: 255 }).trim(),
   check('description').optional({ checkNull: true, checkFalsy: true }).isString().isLength({ min: 1 }).trim(),
@@ -59,4 +49,4 @@ const update = [
   check('restaurantId').not().exists()
 ]
 
-export { create, update, checkRestaurantHasDiscount }
+export { create, update }
