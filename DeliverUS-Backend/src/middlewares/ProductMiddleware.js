@@ -24,6 +24,20 @@ const checkProductRestaurantOwnership = async (req, res, next) => {
   }
 }
 
+const checkRestaurantDiscount = async (req, res, next) => {
+  try {
+    const product = await Product.findByPk(req.params.productId, { include: { model: Restaurant, as: 'restaurant' } })
+    const rest = await Restaurant.findOne({ where: { id: product.restaurantId, discount: 0 } })
+    if (!rest) {
+      return next()
+    } else {
+      return res.status(409).send('Orders exists with deliveredAt like null')
+    }
+  } catch (err) {
+    return res.status(500).send(err.message)
+  }
+}
+
 const checkProductHasNotBeenOrdered = async (req, res, next) => {
   try {
     const product = await Product.findByPk(req.params.productId, { include: { model: Order, as: 'orders' } })
@@ -37,4 +51,4 @@ const checkProductHasNotBeenOrdered = async (req, res, next) => {
   }
 }
 
-export { checkProductOwnership, checkProductRestaurantOwnership, checkProductHasNotBeenOrdered }
+export { checkProductOwnership, checkProductRestaurantOwnership, checkProductHasNotBeenOrdered, checkRestaurantDiscount }

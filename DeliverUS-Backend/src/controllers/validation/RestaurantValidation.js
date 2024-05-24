@@ -12,7 +12,7 @@ const create = [
   check('email').optional({ nullable: true, checkFalsy: true }).isString().isEmail().trim(),
   check('phone').optional({ nullable: true, checkFalsy: true }).isString().isLength({ min: 1, max: 255 }).trim(),
   check('restaurantCategoryId').exists({ checkNull: true }).isInt({ min: 1 }).toInt(),
-  check('userId').not().exists(),
+  check('userId').not().exists(), check('discount').exists().isInt({ min: 0, max: 100 }),
   check('heroImage').custom((value, { req }) => {
     return checkFileIsImage(req, 'heroImage')
   }).withMessage('Please upload an image with format (jpeg, png).'),
@@ -36,7 +36,7 @@ const update = [
   check('email').optional({ nullable: true, checkFalsy: true }).isString().isEmail().trim(),
   check('phone').optional({ nullable: true, checkFalsy: true }).isString().isLength({ min: 1, max: 255 }).trim(),
   check('restaurantCategoryId').exists({ checkNull: true }).isInt({ min: 1 }).toInt(),
-  check('userId').not().exists(),
+  check('userId').not().exists(), check('discount').exists().isInt({ min: 0, max: 100 }),
   check('heroImage').custom((value, { req }) => {
     return checkFileIsImage(req, 'heroImage')
   }).withMessage('Please upload an image with format (jpeg, png).'),

@@ -48,6 +48,7 @@ const loadFileRoutes = (app) => {
     isLoggedIn,
     hasRole('owner'),
     checkEntityExists(Product, 'productId'),
+    ProductMiddleware.checkRestaurantDiscount,
     ProductController.changePromote
   )
 }

@@ -107,7 +107,7 @@ export default function RestaurantDetailScreen ({ navigation, route }) {
             </TextRegular>
           </View>
         </Pressable>
-        {restaurant.discount > 0 &&
+        {
         <Pressable
             onPress={() => { promoteSwitch(item.id) }}
             style={({ pressed }) => [
